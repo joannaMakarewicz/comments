@@ -4,7 +4,22 @@ import axios from "axios";
 const ApiTable = () => {
   const api = "https://jsonplaceholder.typicode.com/posts";
   const [posts, setPosts] = useState([]);
-  const [newTitle, setNewTitle] = useState('');
+  const [newTitle, setNewTitle] = useState("");
+  const [updatePost, setUpdatePost] = useState("");
+
+  const handleDelete = async (post) => {
+    await axios.delete(api + "/" + post.id + post);
+    setPosts(posts.filter((p) => p.id !== post.id));
+  };
+
+  const handleUpdate = async (post) => {
+    post.title = updatePost;
+    await axios.put(api + "/" + post.id);
+    const postClone = [...posts];
+    const index = postClone.indexOf(post);
+    postClone[index] = { ...post };
+    setPosts(postClone);
+  };
 
   useEffect(() => {
     const getPost = async () => {
@@ -15,10 +30,10 @@ const ApiTable = () => {
   }, []);
 
   const addPost = async () => {
-    const post = {title:newTitle};
+    const post = { title: newTitle };
     await axios.post(api, post);
-    setPosts([post,...posts]);
-  }
+    setPosts([post, ...posts]);
+  };
 
   console.log(posts);
 
@@ -27,12 +42,18 @@ const ApiTable = () => {
       <h1>There are {posts.length} posts in Database</h1>
       <div className="row">
         <div className="col">
-          <input className="form-control" placeholder="Add post" onChange={(e) => {
-            setNewTitle(e.target.value)
-          }}/>
+          <input
+            className="form-control"
+            placeholder="Add post"
+            onChange={(e) => {
+              setNewTitle(e.target.value);
+            }}
+          />
         </div>
         <div className="col">
-          <button className="btn btn-primary" onClick={addPost}>Add Post</button>
+          <button className="btn btn-primary" onClick={addPost}>
+            Add Post
+          </button>
         </div>
       </div>
       <table className="table">
@@ -52,11 +73,22 @@ const ApiTable = () => {
                   <input
                     className="form-control"
                     placeholder="Update Article"
+                    onChange={(e) => setUpdatePost(e.target.value)}
                   />
-                  <button className="btn btn-info">Update</button>
+                  <button
+                    className="btn btn-info"
+                    onClick={() => handleUpdate(post)}
+                  >
+                    Update
+                  </button>
                 </td>
                 <td>
-                <button className="btn btn-danger">Delete</button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(post)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             );
