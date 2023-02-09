@@ -4,6 +4,7 @@ import axios from "axios";
 const ApiTable = () => {
   const api = "https://jsonplaceholder.typicode.com/posts";
   const [posts, setPosts] = useState([]);
+  const [newTitle, setNewTitle] = useState('');
 
   useEffect(() => {
     const getPost = async () => {
@@ -13,17 +14,25 @@ const ApiTable = () => {
     getPost();
   }, []);
 
+  const addPost = async () => {
+    const post = {title:newTitle};
+    await axios.post(api, post);
+    setPosts([post,...posts]);
+  }
+
   console.log(posts);
 
   return (
     <div className="container">
-      <h1>There are ... post in Database</h1>
+      <h1>There are {posts.length} posts in Database</h1>
       <div className="row">
         <div className="col">
-          <input className="form-control" placeholder="Add post" />
+          <input className="form-control" placeholder="Add post" onChange={(e) => {
+            setNewTitle(e.target.value)
+          }}/>
         </div>
         <div className="col">
-          <button className="btn btn-primary">Add Post</button>
+          <button className="btn btn-primary" onClick={addPost}>Add Post</button>
         </div>
       </div>
       <table className="table">
