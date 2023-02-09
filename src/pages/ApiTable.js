@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const ApiTable = () => {
-
   const api = "https://jsonplaceholder.typicode.com/posts";
   const [posts, setPosts] = useState([]);
 
@@ -36,6 +35,23 @@ const ApiTable = () => {
           </tr>
         </thead>
         <tbody>
+          {posts.map((post, index) => {
+            return (
+              <tr key={index}>
+                <td>{post.title}</td>
+                <td>
+                  <input
+                    className="form-control"
+                    placeholder="Update Article"
+                  />
+                  <button className="btn btn-info">Update</button>
+                </td>
+                <td>
+                <button className="btn btn-danger">Delete</button>
+                </td>
+              </tr>
+            );
+          })}
           <tr>
             <td>Tittle</td>
             <td>
