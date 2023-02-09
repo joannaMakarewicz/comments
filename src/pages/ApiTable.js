@@ -1,6 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const ApiTable = () => {
+
+  const api = "https://jsonplaceholder.typicode.com/posts";
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const getPost = async () => {
+      const { data: res } = await axios.get(api);
+      setPosts(res);
+    };
+    getPost();
+  }, []);
+
+  console.log(posts);
+
   return (
     <div className="container">
       <h1>There are ... post in Database</h1>
@@ -27,7 +42,7 @@ const ApiTable = () => {
               <input type="text" className="form-control" />
             </td>
             <td>
-                <button className="btn btn-danger">Delete</button>
+              <button className="btn btn-danger">Delete</button>
             </td>
           </tr>
         </tbody>
